@@ -27,7 +27,15 @@ const resolvers = {
         return { token, user };
     },
     addUser: async (parent, { username, email, password }) => {
-        return await User.create({ username, email, password });
+        const user = await User.create({ username, email, password });
+        if (!user) {
+            throw new Error('Something went wrong!');
+        }
+        const token = signToken(user);
+        if (!token) {
+            throw new Error('Error signing token');
+        }
+        return {token, user};
     },
     saveBook: async (parent, { userId, bookData }) => {
         return await User.findOneAndUpdate(
