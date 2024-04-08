@@ -21,3 +21,22 @@ export const ADD_USER = gql`
         }
     }
 `;
+
+export const SAVE_BOOK = gql`
+    mutation Mutation($bookData: BookInput!, $userId: ID!) {
+        saveBook(bookData: $bookData, userId: $userId) {
+        _id
+        username
+        email
+        bookCount
+        savedBooks {
+            bookId
+            authors
+            description
+            title
+            image
+            link
+        }
+        }
+    }
+`;
