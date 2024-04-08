@@ -32,6 +32,24 @@ const SearchBooks = () => {
     return () => saveBookIds(savedBookIds);
   });
 
+  function validateBookInput(bookData) {
+    if (!bookData.title) {
+      throw new Error('Please provide a title for the book.');
+    }
+    if (!bookData.authors) {
+      throw new Error('Please provide an author for the book.');
+    }
+    if (!bookData.description) {
+      throw new Error('Please provide a description for the book.');
+    }
+    if (!bookData.image) {
+      throw new Error('Please provide a thumbnail image for the book.');
+    }
+    if (!bookData.link) {
+      throw new Error('Please provide a link for the book.');
+    }
+  }
+
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -49,12 +67,15 @@ const SearchBooks = () => {
 
       const { items } = await response.json();
 
+      console.log(items);
+
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ['No author to display'],
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
+        link: book.volumeInfo.infoLink,
       }));
 
       setSearchedBooks(bookData);
@@ -77,9 +98,17 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      validateBookInput(bookToSave);
+      const response = await saveBook({
+        variables: {
+          userId: Auth.getProfile().data._id,
+          bookData: bookToSave,
+        },
+      });
 
-      if (!response.ok) {
+      console.log(response);
+
+      if (!response.data.saveBook) {
         throw new Error('something went wrong!');
       }
 
