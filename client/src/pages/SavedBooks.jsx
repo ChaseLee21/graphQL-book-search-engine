@@ -21,6 +21,9 @@ const SavedBooks = () => {
   const userDataLength = Object.keys(userData).length;
 
   useQuery(GET_ME, {
+    variables: {
+      username: Auth.getProfile().data.username,
+    },
     onCompleted: (data) => {
       setUserData(data.me);
     },
@@ -77,6 +80,7 @@ const SavedBooks = () => {
 
   return (
     <>
+    {/* I did not touch this container. This error existed from the starter code but the page seems to load fine */}
       <div fluid className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
