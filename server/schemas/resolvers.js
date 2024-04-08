@@ -5,13 +5,10 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
     user: async (parent, { userId }) => {
-      return await User.findById(userId);
-    },
-
-
-    books: async () => {
-      return await Book.find({});
-    },
+      return await User.findById(userId)
+        .select('-__v -password')
+        .populate('savedBooks');
+    }
   },
   Mutation: {
     login: async (parent, { username, email, password }) => {
