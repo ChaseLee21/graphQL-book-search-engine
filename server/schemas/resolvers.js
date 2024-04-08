@@ -14,17 +14,20 @@ const resolvers = {
     login: async (parent, { username, email, password }) => {
         const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
         if (!user) {
-            return res.status(400).json({ message: "Can't find this user" });
+            throw new Error("Can't find this user");
         }
         const correctPw = await user.isCorrectPassword(password);
         if (!correctPw) {
-            return res.status(400).json({ message: 'Wrong password!' });
+            throw new Error('Wrong password!');
         }
         const token = signToken(user);
+        if (!token) {
+            throw new Error('Error signing token');
+        }
         return { token, user };
     },
-    addUser: async (parent, { userData }) => {
-        return await User.create(userData);
+    addUser: async (parent, { username, email, password }) => {
+        return await User.create({ username, email, password });
     },
     saveBook: async (parent, { userId, bookData }) => {
         return await User.findOneAndUpdate(
