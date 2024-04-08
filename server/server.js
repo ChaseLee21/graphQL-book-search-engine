@@ -13,7 +13,11 @@ const { typeDefs, resolvers } = require('./schemas');
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  cors: {
+    origin: 'https://graphql-book-search-engine.onrender.com/', // replace with your app's domain in production
+    credentials: true,
+  },
 });
 
 const app = express();

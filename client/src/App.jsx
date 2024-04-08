@@ -18,7 +18,7 @@ import { setContext } from '@apollo/client/link/context';
 
 // for production
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: 'https://graphql-book-search-engine.onrender.com/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
