@@ -33,16 +33,23 @@ const SignupForm = () => {
       event.stopPropagation();
     }
 
+    // Check if userFormData contains username, email, and password
+    if (!userFormData.username || !userFormData.email || !userFormData.password) {
+      console.error('Username, email, and password are required');
+      setShowAlert(true);
+      return;
+    }
+
     try {
-      const response = await addUser(userFormData);
+      const response = await addUser({
+        variables: {
+          username: userFormData.username.toString(),
+          email: userFormData.email.toString(),
+          password: userFormData.password.toString(),
+        },
+      });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
+      Auth.login(response.data.addUser.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
