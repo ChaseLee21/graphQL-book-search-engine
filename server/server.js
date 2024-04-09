@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const db = require('./config/connection');
 const routes = require('./routes');
+const cors = require('cors');
 
 // import ApolloServer
 const { ApolloServer } = require('@apollo/server');
@@ -13,13 +14,15 @@ const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  cors: {
-    origin: 'https://graphql-book-search-engine.onrender.com/', // replace with your app's domain in production
-    credentials: true,
-  },
 });
 
 const app = express();
+
+// Use cors middleware and specify the origin
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://graphql-book-search-engine.onrender.com/'], 
+  credentials: true,
+}));
 
 // creating a function to start apollo server with gql schema
 const startApolloServer = async () => {
