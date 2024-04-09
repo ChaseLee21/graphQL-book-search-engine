@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const db = require('./config/connection');
 const routes = require('./routes');
-const cors = require('cors');
 
 // import ApolloServer
 const { ApolloServer } = require('@apollo/server');
@@ -28,9 +27,6 @@ const startApolloServer = async () => {
 
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
-
-  // enable cors
-  app.use(cors());
 
   app.use('/graphql', expressMiddleware(server));
 
