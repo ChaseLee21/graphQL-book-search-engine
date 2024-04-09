@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 import { useMutation } from '@apollo/client';
@@ -48,6 +47,8 @@ const SignupForm = () => {
           password: userFormData.password.toString(),
         },
       });
+
+      console.log(response);
 
       Auth.login(response.data.addUser.token);
     } catch (err) {
